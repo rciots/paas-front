@@ -1,0 +1,348 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/patternfly.css">
+    <link rel="stylesheet" href="../css/patternfly-addons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+<body>
+    <%- include('template_header') %>
+    <main>
+      <h1 id="tittle"><%= device.name %></h1>
+      <div class="container-fluid mt-4">
+        <div class="row">
+          <div class="col-md-2">
+            <%- include('template_devices') %>
+          </div>
+          <div class="col-md-10">
+
+      <div class="pf-c-form">
+        <form method="POST" id="form-template" action="/devices/device-update">
+            <table class="pf-c-table">
+                <tbody>
+                  <tr>
+                    <td style="width: 30%; vertical-align: top;">
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="name">Device Name:</label>
+                          <div class="pf-c-form__group">
+                            <input style="width: 200px;" class="pf-c-form-control" aria-setsize="10" size="30" type="text" id="name" name="name" maxlength="30" value="<%= device.name %>" required>
+                          </div>
+                      </div>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="owner">Owner:</label>
+                        <div class="pf-c-form__group">
+                          <select style="width: 200px;" class="pf-c-form-control" id="owner" name="owner">
+                            <option value="<%= device.ownername %>" selected><%= device.ownername %></option>
+                            <option value="owner2">Owner 2</option>
+                            <option value="owner3">Owner 3</option>
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="description">Description:</label>
+                        <textarea class="pf-c-form-control" type="text" id="description" name="description" rows="3" required><%= device.description %></textarea>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <table style="width: 100%;">
+                        <tr>
+                          <td style="width: 30%; vertical-align: top;">
+                            <div>
+                              <select style="width: 200px;" class="pf-c-form-control" id="template" name="template">
+                                  <option value="<%= seltemplate %>" selected><%= seltemplate %></option>
+
+                                <% templates.forEach(function(template) { %>
+                                  <% if (template.name !== seltemplate) { %>
+                                    <option value="<%= template.name %>"><%= template.name %></option>
+                                  <% } %>
+                                <% }); %>
+                              </select>
+                              <button class="pf-c-button pf-m-primary" id="selecttemplate">select template</button>
+                            </div>
+                            /base/
+                            <nav class="pf-c-nav navbar-light nav-files" id="template-navfiles">
+                              <ul class="pf-c-nav__list" id="template-file-list">
+                                <% templates.forEach(function(template) { %>
+                                  <% if (template.name === seltemplate) { %>
+                                    <% template.files.forEach(function(file) { %>
+                                      <li class="pf-c-nav__item">
+                                        <a href="#file" id="/base/<%= file.name %>" onclick="changefile('/base/<%= file.name %>')" class="pf-c-nav__link"><%= file.name %></a>
+                                      </li>
+                                    <% }); %>
+                                  <% } %>
+                                <% }); %>
+                              </ul>
+                            </nav>
+                            /device/
+                            <nav class="pf-c-nav navbar-light nav-files" id="navfiles">
+                              <ul class="pf-c-nav__list" id="file-list">
+                                <% if (device.files !== "") { %>
+                                  <% device.files.forEach(function(file) { %>
+                                    <li class="pf-c-nav__item">
+                                      <a href="#file" id="<%= file.name %>" onclick="changefile('<%= file.name %>')" class="pf-c-nav__link"><%= file.name %></a>
+                                    </li>
+                                  <% }); %>
+                                <% } else { %>
+                                  <li class="pf-c-nav__item">
+                                    <a href="#file" id="kustomization.yaml" onclick="changefile('kustomization.yaml')" class="pf-c-nav__link">kustomization.yaml</a> 
+                                  </li>
+                                <% } %>
+                              </ul>
+                              <input class="pf-c-form-control" type="text" id="new_file" name="new_file" required>
+                              <button class="pf-c-button pf-m-primary" id="addfile">Add file</button>
+                            </nav>
+                          </td>
+                          <td>
+                            <table>
+                              <tr>
+                                <td style="width: 30%; vertical-align: bottom;">
+                                  File Name:
+                                  <input class="pf-c-form-control" type="text" id="filename" name="filename" required>
+                                </td>
+                                <td style="width: 30%; vertical-align: bottom;">
+                                  <button class="pf-c-button pf-m-primary" id="updatefile">Update file</button>
+                                  
+                                </td>
+                                <td style="width: 30%; vertical-align: bottom;">
+                                  <button class="pf-c-button pf-m-danger" id="deletefile">Delete file</button>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td colspan="3">
+                                  Content:
+                                  <textarea class="pf-c-form-control" type="text" id="filecontent" name="fileconent" rows="10" cols="5" required></textarea>
+
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      <button class="pf-c-button pf-m-primary" id="updatedevice">Update Device</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+    <script>
+    var arrfiles = {};
+    var device = <%- JSON.stringify(device) %>;
+    device.files.forEach(function(file) { 
+      arrfiles[file.name] = file.content;
+    });
+    const navfiles = document.getElementById('navfiles')
+    const templatenavfiles = document.getElementById('template-navfiles');
+ //$('#alertToken').hide();
+  function changefile(filename){
+    var seltemplate = <%- seltemplate ? JSON.stringify(seltemplate) : "" %>;
+    var templates = <%- templates ? JSON.stringify(templates) : [] %>;
+    const updatefile = document.getElementById('updatefile');
+    const deletefile = document.getElementById('deletefile');
+    var listItems = navfiles.getElementsByTagName('li');
+    var listItems2 = templatenavfiles.getElementsByTagName('li');
+    for (var i = 0; i < listItems.length; i++) {
+      var listlink = listItems[i].getElementsByTagName('a');
+      listlink[0].classList.remove('pf-m-current'); 
+    }
+    for (var i = 0; i < listItems2.length; i++) {
+      var listlink = listItems2[i].getElementsByTagName('a');
+      listlink[0].classList.remove('pf-m-current'); 
+    }
+    document.getElementById(filename).classList.add("pf-m-current");
+    const filetext = document.getElementById('filename');
+    const textarea = document.getElementById('filecontent');
+    filetext.value = filename;
+    if (filename.startsWith("/base/")) {
+      templates.forEach(function(template) {
+        if (template.name == seltemplate) {
+          template.files.forEach(function(file) {
+            if (file.name == filename.substring(filename.lastIndexOf("/") + 1)) {
+              textarea.value = file.content;
+              updatefile.disabled = true;
+              deletefile.disabled = true;
+              textarea.readOnly = true;
+              filetext.readOnly = true;
+            }
+          });
+        }
+      });
+    } else {
+      textarea.value = arrfiles[filename];
+      updatefile.disabled = false;
+      deletefile.disabled = false;
+      textarea.readOnly = false;
+      filetext.readOnly = false;
+    }
+  }
+    $(document).ready(function() {
+
+      const textarea = document.getElementById('filecontent');
+      textarea.addEventListener('keydown', (e) => {
+        if (e.keyCode === 9) {
+          e.preventDefault()
+
+          textarea.setRangeText(
+            '  ',
+            textarea.selectionStart,
+            textarea.selectionStart,
+            'end'
+          )
+        }
+      })
+
+      const selecttemplateButton = document.getElementById('selecttemplate');
+      selecttemplateButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const selectElement = document.getElementById("template");
+        const selectedIndex = selectElement.selectedIndex;
+        const selectedOption = selectElement.options[selectedIndex];
+        const selectedValue = selectedOption.value;
+        var url = "/devices/" + device._id + "/edit";
+        var formData = {};
+        const devicename = document.getElementById('name').value.trim();
+        console.log("arrfiles");
+        console.log(arrfiles);
+        formData["name"] = devicename;
+        formData["template"] = selectedValue;
+        console.log(formData);
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: formData,
+          success: function(response) {
+            window.location.href = "/devices/" + device._id;
+          }
+        });
+      });
+      const updatedeviceButton = document.getElementById('updatedevice');
+      updatedeviceButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const formTemplate = document.getElementById("form-template");
+        var url = "/devices/" + device._id + "/edit";
+        var formData = {};
+        const devicename = document.getElementById('name').value.trim();
+        const devicedesc = document.getElementById('description').value.trim();
+        const deviceowner = document.getElementById('owner').value.trim();
+        console.log("arrfiles");
+        console.log(arrfiles);
+        formData["name"] = devicename;
+        formData["description"] = devicedesc;
+        formData["owner"] = deviceowner;
+        console.log(JSON.stringify(arrfiles));
+        formData["files"] = JSON.stringify(arrfiles);
+        console.log(formData);
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: formData,
+          success: function(response) {
+            window.location.href = "/devices";
+          }
+        });
+      });
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const updateButton = document.getElementById('updatefile');
+      updateButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const filetext = document.getElementById('filename').value.trim();
+        const textarea = document.getElementById('filecontent').value.trim();
+        arrfiles[filetext] = textarea;
+        console.log(arrfiles);
+
+      });
+      const addButton = document.getElementById('addfile');
+      const deleteButton = document.getElementById('deletefile');
+      const fileList = document.getElementById('file-list');
+      const newFileInput = document.getElementById('new_file');
+      const filename = document.getElementById('filename');
+      
+
+    var fName = '';
+    deleteButton.addEventListener('click', function(event) {
+      event.preventDefault();
+      const filetext = document.getElementById('filename').value.trim();
+      console.log(arrfiles);
+      delete arrfiles[filetext];
+      const filetodelete = document.getElementById(filetext);
+      filetodelete.parentNode.remove();
+      document.getElementById('filename').value = "";
+      document.getElementById('filecontent').value = "";
+      console.log(arrfiles);
+    });
+    addButton.addEventListener('click', function(event) {
+      event.preventDefault();
+      var listItems = navfiles.getElementsByTagName('li');
+      var listItems2 = templatenavfiles.getElementsByTagName('li');
+      for (var i = 0; i < listItems.length; i++) {
+        var listlink = listItems[i].getElementsByTagName('a');
+        listlink[0].classList.remove('pf-m-current'); 
+      }
+      for (var i = 0; i < listItems2.length; i++) {
+        var listlink = listItems2[i].getElementsByTagName('a');
+        listlink[0].classList.remove('pf-m-current'); 
+      }
+      const fileName = newFileInput.value.trim();
+
+      if (fileName !== '') {
+        if ((fileName.endsWith('.yaml')) || (fileName.endsWith('.yml'))) {
+          const newLi = document.createElement('li');
+          newLi.classList.add('pf-c-nav__item');
+          const newLink = document.createElement('a');
+          newLink.classList.add('pf-c-nav__link');
+          newLink.href = '#file';
+          newLink.onclick = function() {
+            changefile(fileName);
+          };
+          newLink.textContent = fileName;
+          newLink.id = fileName;
+          fName = fileName;
+          newLi.appendChild(newLink);
+          fileList.appendChild(newLi);
+          document.getElementById(fileName).classList.add("pf-m-current");
+        } else {
+          const newLi = document.createElement('li');
+          newLi.classList.add('pf-c-nav__item');
+          const newLink = document.createElement('a');
+          newLink.classList.add('pf-c-nav__link');
+          newLink.href = '#file';
+          newLink.onclick = function() {
+            changefile(fileName + '.yaml');
+          };
+          newLink.textContent = fileName + ".yaml";
+          newLink.id = fileName + ".yaml"
+          fName = fileName + ".yaml";
+          newLi.appendChild(newLink);
+          fileList.appendChild(newLi);
+          document.getElementById(fileName + ".yaml").classList.add("pf-m-current");
+        }
+        
+        arrfiles[fName] = "";
+        const textarea = document.getElementById('filecontent');
+        textarea.value = '';
+        filename.value = fName;
+        
+        newFileInput.value = ''; // Limpiar el campo de entrada después de agregar el archivo
+        changefile(fName)
+      }
+    });
+  });
+    </script>
+      
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+      <script src="../js/bootstrap.bundle.min.js"></script>
+    </body>
+  </html>

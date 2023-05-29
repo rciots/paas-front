@@ -1,0 +1,239 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/patternfly.css">
+    <link rel="stylesheet" href="../css/patternfly-addons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+<body>
+    <%- include('template_header') %>
+    <main>
+      <h1 id="tittle">Create Template</h1>
+      <div class="container-fluid mt-4">
+        <div class="row">
+          <div class="col-md-2">
+            <%- include('template_devices') %>
+          </div>
+          <div class="col-md-10">
+
+      <div class="pf-c-form">
+        <form method="POST" id="form-template" action="/devices/template-create">
+            <table class="pf-c-table">
+                <tbody>
+                  <tr>
+                    <td style="width: 30%; vertical-align: top;">
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="name">Template Name:</label>
+                          <div class="pf-c-form__group">
+                            <input style="width: 200px;" class="pf-c-form-control" aria-setsize="10" size="30" type="text" id="name" name="name" maxlength="30" required>
+                          </div>
+                      </div>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="owner">Owner:</label>
+                        <div class="pf-c-form__group">
+                          <select style="width: 200px;" class="pf-c-form-control" id="owner" name="owner">
+                            <option value="<%= username %>" selected><%= username %></option>
+                            <option value="owner2">Owner 2</option>
+                            <option value="owner3">Owner 3</option>
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="description">Description:</label>
+                        <textarea class="pf-c-form-control" type="text" id="description" name="description" rows="3" required></textarea>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <table style="width: 100%;">
+                        <tr>
+                          <td style="width: 30%; vertical-align: top;">
+                            /base/
+                            <nav class="pf-c-nav navbar-light nav-files" id="navfiles">
+                              <ul class="pf-c-nav__list" id="file-list">
+                                <li class="pf-c-nav__item">
+                                  <a href="#file" id="kustomization.yaml" onclick="changefile('kustomization.yaml')" class="pf-c-nav__link">kustomization.yaml</a> 
+                                </li>
+                              </ul>
+                              <input class="pf-c-form-control" type="text" id="new_file" name="new_file" required>
+                              <button class="pf-c-button pf-m-primary" id="addfile">Add file</button>
+                            </nav>
+                          </td>
+                          <td>
+                            <table>
+                              <tr>
+                                <td style="width: 30%; vertical-align: bottom;">
+                                  File Name:
+                                  <input class="pf-c-form-control" type="text" id="filename" name="filename" value="kustomization.yaml" required>
+                                </td>
+                                <td style="width: 30%; vertical-align: bottom;">
+                                  <button class="pf-c-button pf-m-primary" id="updatefile">Update file</button>
+                                  
+                                </td>
+                                <td style="width: 30%; vertical-align: bottom;">
+                                  <button class="pf-c-button pf-m-danger" onclick="deletefile()" id="deletefile">Delete file</button>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td colspan="3">
+                                  Content:
+                                  <textarea class="pf-c-form-control" type="text" id="filecontent" name="fileconent" rows="10" cols="5" required></textarea>
+
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                      <button class="pf-c-button pf-m-primary" id="createtemplate" type="submit">Create Template</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+    <script>
+ //$('#alertToken').hide();
+  var arrfiles = {"kustomization.yaml": "resources:\n  - "};
+  function changefile(filename){
+    var listItems = navfiles.getElementsByTagName('li');
+    for (var i = 0; i < listItems.length; i++) {
+      var listlink = listItems[i].getElementsByTagName('a');
+      listlink[0].classList.remove('pf-m-current'); 
+    }
+    document.getElementById(filename).classList.add("pf-m-current");
+    const filetext = document.getElementById('filename');
+    const textarea = document.getElementById('filecontent');
+    filetext.value = filename;
+    textarea.value = arrfiles[filename];
+
+  }
+    $(document).ready(function() {
+
+
+      document.getElementById("kustomization.yaml").classList.add("pf-m-current");
+      const textarea = document.getElementById('filecontent');
+      textarea.addEventListener('keydown', (e) => {
+        if (e.keyCode === 9) {
+          e.preventDefault()
+
+          textarea.setRangeText(
+            '  ',
+            textarea.selectionStart,
+            textarea.selectionStart,
+            'end'
+          )
+        }
+      })
+      textarea.value = arrfiles["kustomization.yaml"];
+      // set arrfiles as textarea content
+
+      const templateCreateButton = document.getElementById('createtemplate');
+      templateCreateButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const formTemplate = document.getElementById("form-template");
+        var url = "/devices/template-create";
+        var formData = {};
+        const templatename = document.getElementById('name').value.trim();
+        const templatedesc = document.getElementById('description').value.trim();
+        const templateowner = document.getElementById('owner').value.trim();
+        console.log(arrfiles);
+        formData["template"] = templatename;
+        formData["description"] = templatedesc;
+        formData["owner"] = templateowner;
+        console.log(arrfiles);
+        formData["files"] = JSON.stringify(arrfiles);
+        console.log(formData["files"]);
+        console.log(formData);
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: formData,
+          success: function(response) {
+            formTemplate.reset();
+          }
+        });
+      });
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const updateButton = document.getElementById('updatefile');
+      updateButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        const filetext = document.getElementById('filename').value.trim();
+        const textarea = document.getElementById('filecontent').value.trim();
+        arrfiles[filetext] = textarea;
+        console.log(arrfiles);
+
+      });
+      const addButton = document.getElementById('addfile');
+      const fileList = document.getElementById('file-list');
+      const newFileInput = document.getElementById('new_file');
+      const filename = document.getElementById('filename');
+      const navfiles = document.getElementById('navfiles');
+    var fName = '';
+    addButton.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      var listItems = navfiles.getElementsByTagName('li');
+      for (var i = 0; i < listItems.length; i++) {
+        var listlink = listItems[i].getElementsByTagName('a');
+        listlink[0].classList.remove('pf-m-current'); 
+      }
+      const fileName = newFileInput.value.trim();
+
+      if (fileName !== '') {
+        if ((fileName.endsWith('.yaml')) || (fileName.endsWith('.yml'))) {
+          const newLi = document.createElement('li');
+          newLi.classList.add('pf-c-nav__item');
+          const newLink = document.createElement('a');
+          newLink.classList.add('pf-c-nav__link');
+          newLink.href = '#file';
+          newLink.onclick = function() {
+            changefile(fileName + '.yaml');
+          };
+          newLink.textContent = fileName;
+          
+          newLi.appendChild(newLink);
+          fileList.appendChild(newLi);
+        } else {
+          const newLi = document.createElement('li');
+          newLi.classList.add('pf-c-nav__item');
+          const newLink = document.createElement('a');
+          newLink.classList.add('pf-c-nav__link');
+          newLink.href = '#file';
+          newLink.onclick = function() {
+            changefile(fileName + '.yaml');
+          };
+          newLink.textContent = fileName + ".yaml";
+          newLink.id = fileName + ".yaml"
+          fName = fileName + ".yaml";
+          newLi.appendChild(newLink);
+          fileList.appendChild(newLi);
+          document.getElementById(fileName + ".yaml").classList.add("pf-m-current");
+        }
+        arrfiles[fName] = "";
+        const textarea = document.getElementById('filecontent');
+        textarea.value = '';
+        filename.value = fName;
+        
+        newFileInput.value = ''; // Limpiar el campo de entrada después de agregar el archivo
+      }
+    });
+  });
+    </script>
+      
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+      <script src="../js/bootstrap.bundle.min.js"></script>
+    </body>
+  </html>

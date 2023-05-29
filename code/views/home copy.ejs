@@ -1,0 +1,196 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/patternfly.css">
+    <link rel="stylesheet" href="css/patternfly-addons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+<body>
+    <header>
+        <div class="container-fluid">
+            <nav class="pf-c-nav pf-m-horizontal navbar-light" aria-label="Global">
+                <a href='/' class='navbar-brand'>
+                    <span class='text-primary'>
+                    <strong>
+                        <img src='/images/rciots_logo_s.gif' alt='logo' class='img-fluid' />
+                    </strong>
+                    </span>
+                </a>
+                <ul class="pf-c-nav__list">
+                <li class="pf-c-nav__item">
+                    <a href="#" class="pf-c-nav__link pf-m-current" aria-current="page">Home</a>
+                </li>
+                <li class="pf-c-nav__item">
+                    <a href="#" class="pf-c-nav__link">About</a>
+                </li>
+                <li class="pf-c-nav__item">
+                    <a href="#" class="pf-c-nav__link">Contact</a>
+                </li>
+                </ul>
+                <div class="ms-auto">
+                  <%  if (typeof user !== 'undefined') {%>
+                    Welcome, <a href="/users/profile" ><%= user %></a>!
+                    <button class="pf-c-button pf-m-primary" onclick="location.href='/users/logout'">Logout</button>
+                  <% } else { %>
+                    <button class="pf-c-button pf-m-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                  <% } %>
+                </div>
+            </nav>
+        </div>
+          <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                    
+                  <h1 class="modal-title fs-5">Login</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <div class="modal-body">
+                  <form class="form-signin" method="POST" action="/users/login">
+                    <label for="inputUsername">Username</label>
+                    <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
+                    <label for="inputPassword">Password</label>
+                    <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+                    
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                    <div id="alertLogin" class="alert alert-danger alert-dismissible fade show" role="alert">
+                      <strong>Error:</strong>
+                      <div id="alertLoginText" class="content">
+                        Something went wrong!
+                      </div><br><br>
+                      <button type="button" class="close" data-dismiss="alertLogin" aria-label="Close" onclick="hideAlert('alertLogin')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                  </form>
+                  
+                  <a class="create-account-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Create an account</a>
+                </div>
+                <div class="modal-footer">
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <script>
+  $(document).ready(function() {
+    $('#loginModal').on('show.bs.modal', function() {
+      $('#alertLogin').hide();
+      $('#alertRegister').hide();
+    });
+    $('.form-signin').submit(function(event) {
+      event.preventDefault();
+      var form = $(this);
+      var url = form.attr('action');
+      var formData = form.serialize();
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: formData,
+        success: function(response) {
+          console.log(typeof response.authenticated );
+          if (typeof response.authenticated !== undefined) {
+            if (response.authenticated == true) {
+              var user = response.user;
+              console.log(user);
+              window.location.href = '/';
+            } else {
+              $('#alertLoginText').html(response.message);
+              $('#alertLogin').show();
+            }
+            
+          } else {
+            console.log("faaaaaail!!!");
+            $('#alertLoginText').html(response.message);
+            $('#alertLogin').show();
+          }
+        }
+      });
+    });
+    $('.form-register').submit(function(event) {
+      event.preventDefault();
+      var form = $(this);
+      var url = form.attr('action');
+      var formData = form.serialize();
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: formData,
+        success: function(response) {
+          console.log(typeof response.authenticated );
+          if (typeof response.authenticated !== undefined) {
+            if (response.authenticated == true) {
+              var user = response.user;
+              console.log(user);
+              window.location.href = '/';
+            } else {
+              $('#alertLogin').html(response.message);
+              $('#alertLogin').show();
+            }
+            
+          } else {
+            console.log("faaaaaail!!!");
+            $('#alertLogin').html(response.message);
+            $('#alertLogin').show();
+          }
+        }
+      });
+    });
+  });
+  function hideAlert(idalert) {
+    $('#' + idalert).hide();
+  }
+</script>
+          <div class="modal fade <% if (typeof registerMessage !== 'undefined') { %>show<% } %>" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">  
+                        <h1 class="modal-title fs-5">Register</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-register" method="POST" action="/users/register">
+                            <label>email:</label>
+                            <input type="text" name="email" class="form-control" required>
+                            <br>
+                            <label>Username:</label>
+                            <input type="text" name="username" class="form-control" required>
+                            <br>
+                            <label>Password:</label>
+                            <input type="password" name="password" class="form-control" required>
+                            <br>
+                            <button type="submit" class="btn btn-primary">Register</button><div id="alertRegister"></div>
+                        </form>
+                        <a class="create-account-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal, #loginModal" data-bs-dismiss="modal">Login</a>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+          </div>
+    </header>
+    <main class="container">
+      <div class="jumbotron">
+        <h1>Documentation</h1>
+        <br>
+        <p id="markdown-content">Loading markdown content...</p>
+      </div>
+  
+      <script>
+        $(function() {
+          $.get('https://raw.githubusercontent.com/rciots/.github/main/profile/README.md', function(data) {
+            const htmlContent = marked.parse(data);
+            $('#markdown-content').html(htmlContent);
+          });
+        });
+      </script>
+      <script src="js/marked.min.js"></script>
+    </main>
+    
+      
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+    </body>
+  </html>

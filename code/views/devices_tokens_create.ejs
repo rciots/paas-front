@@ -1,0 +1,179 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/patternfly.css">
+    <link rel="stylesheet" href="../css/patternfly-addons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+<body>
+    <%- include('template_header') %>
+    <main>
+      <h1 id="tittle">Create Token</h1>
+      <div class="container-fluid mt-4">
+        <div class="row">
+          <div class="col-md-2">
+            <%- include('template_devices') %>
+          </div>
+          <div class="col-md-10">
+
+      <div class="pf-c-form">
+        <form method="POST" id="form-token" action="/devices/token-create">
+            <table class="pf-c-table">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="name">Name:</label>
+                        <div class="pf-c-form__group">
+                          <input class="pf-c-form-control" type="text" id="name" name="name" required>
+                        </div>
+                      </div>
+                    </td>
+                    <td  style="vertical-align: bottom;">
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="automatic">Automatic:</label>&nbsp;&nbsp;
+                          <input class="pf-c-check__input" type="checkbox" id="automatic" name="automatic" checked>
+                      </div>
+                    </td>
+                    <td  style="vertical-align: bottom;">
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="active">Active:</label>&nbsp;&nbsp;
+                          <input class="pf-c-check__input" type="checkbox" id="active" name="active" checked>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="max">Max devices:</label>
+                        <input class="pf-c-form-control" type="text" id="max" name="max" required>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="owner">Owner:</label>
+                        <div class="pf-c-form__group">
+                          <select class="pf-c-form-control" id="owner" name="owner">
+                            <option value="<%= username %>" selected><%= username %></option>
+                            <option value="owner2">Owner 2</option>
+                            <option value="owner3">Owner 3</option>
+                          </select>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="form-group">
+                        <label for="datepicker">Valid until:</label>
+                        <div class="input-group date">
+                          <input type="text" id="datepicker" name="datepicker" class="form-control">
+                        </div>
+                      </div>
+                      <script>
+                        $(function() {
+                          $('#datepicker').datepicker({
+                            changeMonth: true,
+                            changeYear: true,
+                            minDate: '+0d',
+                            defaultDate: '+1m'
+
+                          });
+                        });
+                        </script>
+                        
+                    </td>
+                    <td style="vertical-align: bottom;">
+                      <button class="pf-c-button pf-m-primary" type="submit">Create Token</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        </form>
+        <div id="alertToken" class="pf-c-alert pf-m-info pf-m-inline" role="alert">
+          <div class="pf-c-alert__icon">
+            <i class="fas fa-fw fa-info-circle" aria-hidden="true"></i>&nbsp<strong>Token:</strong><br>
+          </div>
+          
+            <div class="pf-c-clipboard-copy">
+              <div class="pf-c-clipboard-copy__group">
+                <input 
+                  tabindex="-1"
+                  class="pf-c-form-control"
+                  readonly
+                  type="text"
+                  id="alertTokenText" 
+                  aria-label="Copyable input"
+                />
+                <button
+                  class="pf-c-button pf-m-control"
+                  type="button"
+                  aria-label="Copy to clipboard"
+                  id="copy-button"
+                  aria-labelledby="basic-readonly-copy-button basic-readonly-text-input"
+                >
+                  <i class="fas fa-copy" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>       
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+    <script>
+ //$('#alertToken').hide();
+    $(document).ready(function() {
+
+    });
+    //$('#alertToken').hide();
+      $('#form-token').submit(function(event) {
+        const formToken = document.getElementById("form-token");
+        console.log(event);
+        event.preventDefault();
+        var form = $(this);
+        var url = form.attr('action');
+        var formData = form.serialize();
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: formData,
+          success: function(response) {
+            formToken.reset();
+            const copyButton = document.querySelector('#copy-button');
+            const tokenText = response.message;
+            copyButton.addEventListener('click', () => {
+              navigator.clipboard.writeText(tokenText)
+                .then(() => {
+                  copyButton.setAttribute("data-bs-original-title", "Copied!");
+                  $('#copy-button').tooltip('show');
+                  // Ocultar la notificación después de unos segundos
+                  setTimeout(() => {
+                    copyButton.setAttribute("data-bs-original-title", "");
+                    $('#copy-button').tooltip('hide');
+                  }, 5000);
+                  
+                })
+                .catch((err) => {
+                  console.error('Error al copiar el texto al portapapeles: ', err);
+                });
+            });
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            document.querySelector('#alertTokenText').value = response.message;
+            $('#alertToken').show();
+
+          }
+        });
+      });
+    function hideAlert(idalert) {
+      $('#' + idalert).hide();
+    }
+    </script>
+      
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+      <script src="../js/bootstrap.bundle.min.js"></script>
+    </body>
+  </html>

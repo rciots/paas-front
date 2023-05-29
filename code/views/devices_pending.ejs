@@ -1,0 +1,126 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/patternfly.css">
+    <link rel="stylesheet" href="../css/patternfly-addons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+  
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+</head>
+<body>
+    <%- include('template_header') %>
+    <main>
+      <h1 id="tittle">Pending Devices</h1>
+      <div class="container-fluid mt-4">
+        <div class="row">
+          <div class="col-md-2">
+            <%- include('template_devices') %>
+          </div>
+          <div class="col-md-10">
+            <div class="col-md-6 w-90 extended-card">
+              <div class="pf-c-card extended-card pf-m-0 d-inline-block col-md-6 w-100">
+                <div class="pf-c-card__header">
+                  <h1>Approve or delete devices pending to enroll</h1>
+                </div>
+                <div class="pf-c-card__body">
+                    <table class="pf-c-table pf-m-grid-lg" role="grid" id="table-devices">
+                        <thead>
+                          <tr role="row">
+                            <th class="pf-c-table__sort sortable-handle" role="columnheader" aria-sort="none" scope="col" data-sortable="true">  <button class="pf-c-table__button">
+                                <div class="pf-c-table__button-content">
+                                  <span class="pf-c-table__text sortable-handle">Name</span>
+                                  <span class="pf-c-table__sort-indicator">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                  </span>
+                                </div>
+                              </button></th>
+                            <th class="pf-c-table__sort sortable-handle" role="columnheader" aria-sort="none" scope="col" data-sortable="true">    <button class="pf-c-table__button">
+                                <div class="pf-c-table__button-content">
+                                  <span class="pf-c-table__text sortable-handle">Description</span>
+                                  <span class="pf-c-table__sort-indicator sortable-handle">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                  </span>
+                                </div>
+                              </button></th>
+                            <th class="pf-c-table__sort" role="columnheader" aria-sort="none" scope="col" data-sortable="true">    <button class="pf-c-table__button">
+                                <div class="pf-c-table__button-content">
+                                  <span class="pf-c-table__text sortable-handle">Owner</span>
+                                  <span class="pf-c-table__sort-indicator">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                  </span>
+                                </div>
+                              </button></th>
+                            <th class="pf-c-table__sort" role="columnheader" aria-sort="none" scope="col" data-sortable="true">    <button class="pf-c-table__button">
+                                <div class="pf-c-table__button-content">
+                                  <span class="pf-c-table__text sortable-handle">Created</span>
+                                  <span class="pf-c-table__sort-indicator">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                  </span>
+                                </div>
+                              </button></th>
+                            <th role="columnheader" scope="col" data-sortable="false"></th>
+                          </tr>
+                        </thead>
+                        <tbody data-sortable role="rowgroup">
+                          <% devices.forEach(function(device) { %>
+                          <tr role="row">
+                            <td role="cell" data-label="Name"><%= device.name %></td>
+                            <td role="cell" data-label="Description"><%= device.description %></td>
+                            <td role="cell" data-label="Owner"><%= device.ownername %></td>
+                            <td role="cell" data-label="Created"><%=  new Date(device.createdAt).toLocaleString() %></td>
+                            <td class="pf-c-table__action" role="cell">
+                              <div class="pf-c-overflow-menu">
+                                <div class="pf-c-overflow-menu__control">
+                                  <div class="pf-c-dropdown pf-m-expanded">
+                                    <button class="pf-c-button pf-c-dropdown__toggle pf-m-plain" type="button" aria-label="Actions" onclick="toggleMenu('<%= device.name %>')">
+                                      <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+                                    </button>
+                                    <ul class="pf-c-dropdown__menu pf-m-align-right" id="<%= device.name %>-menu" style="display: none;">
+                                      <li>
+                                        <button class="pf-c-dropdown__menu-item" onclick="window.location.href='/devices/<%= device.id %>/approve'">Approve</button>
+                                      </li>
+                                      <li>
+                                        <button class="pf-c-dropdown__menu-item"onclick="window.location.href='/devices/<%= device.id %>/delete'">Delete</button>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script>
+document.getElementById("nav_devices").classList.add("pf-m-current");
+document.getElementById("devices-pending").classList.add("pf-m-current");
+  function toggleMenu(id) {
+    var menu = document.getElementById(id + '-menu');
+    var menus = document.querySelectorAll('.pf-c-dropdown__menu');
+    for (var i = 0; i < menus.length; i++) {
+      if (menus[i].id !== id + '-menu') {
+        menus[i].style.display = 'none';
+      }
+    }
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  }
+  $('#table-devices').dataTable({
+        order: [[1, 'asc']],
+    });
+      </script>
+      
+</body>
+</html>

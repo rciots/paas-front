@@ -1,0 +1,149 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/patternfly.css">
+    <link rel="stylesheet" href="../css/patternfly-addons.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery.min.js"></script>
+<body>
+    <%- include('template_header') %>
+    <main>
+      <h1 id="tittle"><%= device.name %></h1>
+      <div class="container-fluid mt-4">
+        <div class="row">
+          <div class="col-md-2">
+            <%- include('template_devices') %>
+          </div>
+          <div class="col-md-10">
+
+      <div class="pf-c-form">
+        <form method="POST" action="/devices/<%= device._id %>">
+            <table class="pf-c-table">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="name">Name</label>
+                        <div class="pf-c-form__group">
+                          <input class="pf-c-form-control" type="text" id="name" name="name" value="<%= device.name %>" required>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="id">ID</label>
+                        <div class="pf-c-form__group">
+                          <input class="pf-c-form-control" type="text" id="id" name="id" value="<%= device._id %>" readonly>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="online"><%= device.online ? "Online" : "Offline" %></label>
+                          <span class="pf-c-icon <%= device.online ? 'pf-m-success pf-icon-connected' : 'pf-m-danger pf-icon-disconnected' %>"></span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          <div class="pf-c-form__group">
+            <label class="pf-c-form__label" for="description">Description</label>
+            <div class="pf-c-form__group">
+              <textarea class="pf-c-form-control" id="description" name="description" rows="3"><%= device.description %></textarea>
+            </div>
+          </div>
+          <div class="pf-c-form__group">
+            <label class="pf-c-form__label" for="owner">Owner</label>
+            <div class="pf-c-form__group">
+              <select class="pf-c-form-control" id="owner" name="owner">
+                <option value="<%= device.owner %>" selected><%= device.ownername %></option>
+                <option value="owner2">Owner 2</option>
+                <option value="owner3">Owner 3</option>
+              </select>
+            </div>
+          </div>
+          <div class="pf-c-form__group">
+            <label class="pf-c-form__label">Options</label>
+            <table class="pf-c-table pf-m-compact">
+              <thead>
+                <tr>
+                  <th>Visible</th>
+                  <th>Connector</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="pf-c-form__group">
+                      <input class="pf-c-form-control" type="checkbox" id="visible" name="options.visible" <% if (device.options.visible) { %>checked<% } %>>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="name">Name</label>
+                        <input class="pf-c-form-control" type="text" id="name" name="name" value="<%= device.name %>">
+                      </div>
+                      
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="id">ID</label>
+                        <input class="pf-c-form-control" type="text" id="id" name="id" value="<%= device.id %>" readonly>
+                      </div>
+                      
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="online">Online</label>
+                        <input class="pf-c-form-control" type="checkbox" id="online" name="online" <% if (device.online) { %>checked<% } %> disabled>
+                      </div>
+                      
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="description">Description</label>
+                        <input class="pf-c-form-control" type="text" id="description" name="description" value="<%= device.description %>">
+                      </div>
+                      
+                      <div class="pf-c-form__group">
+                        <label class="pf-c-form__label" for="owner">Owner</label>
+                        <select class="pf-c-form-control" id="owner" name="owner">
+                          <option value="option1" <% if (device.owner === "option1") { %>selected<% } %>>Option 1</option>
+                          <option value="option2" <% if (device.owner === "option2") { %>selected<% } %>>Option 2</option>
+                          <option value="option3" <% if (device.owner === "option3") { %>selected<% } %>>Option 3</option>
+                        </select>
+                      </div>
+                      
+                      <div class="pf-c-form__group">
+                        <table class="pf-c-table pf-m-compact pf-m-grid-md" id="options-table">
+                          <thead>
+                            <tr>
+                              <th>Visible</th>
+                              <th>Connector</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <div class="pf-c-form__group">
+                                  <input class="pf-c-form-control" type="checkbox" id="options-visible" name="options.visible" <% if (device.options.visible) { %>checked<% } %>>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="pf-c-form__group">
+                                  <select class="pf-c-form-control" id="connector" name="options.connector">
+                                    <option value="option1" <% if (device.options.connector === "option1") { %>selected<% } %>>Option 1</option>
+                                    <option value="option2" <% if (device.options.connector === "option2") { %>selected<% } %>>Option 2</option>
+                                    <option value="option3" <% if (device.options.connector === "option3") { %>selected<% } %>>Option 3</option>
+                                  </select>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+    </main>
+    
+      
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+      <script src="../js/bootstrap.bundle.min.js"></script>
+    </body>
+  </html>

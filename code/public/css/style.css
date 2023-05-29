@@ -1,0 +1,152 @@
+body {
+  background-color: #282828 !important;
+  color: #fff;
+  padding: 20px;
+}
+
+header {
+  padding: 10px;
+}
+
+p {
+  color: #d4d4d4;
+}
+.pf-c-button.pf-m-primary {
+  color: var(--pf-c-button--m-primary--Color);
+  background-color: #2f2f2f;
+  margin: 10px;
+}
+.pf-c-button.pf-m-primary:disabled {
+  color: var(--pf-c-button--disabled--Color);
+  background-color: var(--pf-c-button--disabled--BackgroundColor);
+}
+.pf-c-button.pf-m-danger {
+  margin: 10px;
+}
+main {
+  padding: 20px;
+}
+
+form.form-register, form.form-signin{
+  background-color: #2B9AF3;
+}
+
+form {
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+input[type="text"],
+input[type="password"] {
+  background-color: #2f2f2f;
+  color: #d4d4d4;
+  border: none;
+  border-radius: 2px;
+  padding: 6px;
+  margin: 6px 0;
+}
+
+button[type="submit"] {
+  background-color: #d4d4d4;
+  border: none;
+  border-radius: 2px;
+  padding: 6px 12px;
+  color: #282828;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+button[type="submit"]:hover {
+  background-color: #d4d4d4;
+}
+
+.modal-content {
+  background-color: #d4d4d4;
+  padding: 10px;
+}
+.modal-title {
+  color:#2c2c2c;
+}
+.navbar-light {
+  background: #d4d4d4;
+  border-radius: 4px;
+}
+.navbar-brand img {
+  width: 40%;
+  height: auto;
+}
+
+.pf-c-nav__link.pf-m-current, .pf-c-nav__link.pf-m-current:hover, .pf-c-nav__item.pf-m-current:not(.pf-m-expanded) .pf-c-nav__link {
+  color: #000;
+  font-weight:bold;
+}
+
+.pf-m-current {
+  background-color: #fff!important;
+}
+
+.pf-c-nav__link {
+  color: #2c2c2c;
+}
+.pf-c-nav__link:hover {
+  color: #000;
+  font-weight:bold;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.col-md-6.extended-card {
+  width: 80%;
+}
+
+#tittle {
+  color: #d4d4d4;
+  padding: 5px;
+  text-align: center;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+}
+
+.alert .close {
+  margin-left: auto;
+}
+
+#alertLoginText {
+  margin-left: 10px;
+}
+
+
+
+.pf-c-icon.pf-icon-connected {
+  color: var(--pf-global--info-color--100);
+}
+
+.pf-c-icon.pf-icon-disconnected {
+  color: var(--pf-global--danger-color--200);
+}
+
+
+.sortable .sort-indicator {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 10px;
+}
+
+.sortable.asc .sort-indicator:before {
+  content: '\f062';
+}
+
+.sortable.desc .sort-indicator:before {
+  content: '\f063';
+}

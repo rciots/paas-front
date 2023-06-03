@@ -114,6 +114,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script>
+const navBar = document.getElementById('navBar');
+var listItems = navBar.getElementsByTagName('li');
+for (var i = 0; i < listItems.length; i++) {
+  var listlink = listItems[i].getElementsByTagName('a');
+  listlink[0].classList.remove('pf-m-current'); 
+}
 document.getElementById("nav_devices").classList.add("pf-m-current");
 document.getElementById("devices-current").classList.add("pf-m-current");
   function toggleMenu(id) {

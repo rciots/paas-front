@@ -115,7 +115,6 @@
     });
     $('.form-register').submit(function(event) {
       event.preventDefault();
-      $('#alertRegister').hide();
       var form = $(this);
       var url = form.attr('action');
       var formData = form.serialize();
@@ -166,7 +165,7 @@
                             <label>Password:</label>
                             <input type="password" name="password" class="form-control" required>
                             <br>
-                            <button type="submit" class="btn btn-primary">Register</button><div id="alertRegister" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="submit" class="btn btn-primary">Register</button><div id="alertRegister" class="alert alert-danger alert-dismissible fade" role="alert">
                               <strong>Error:</strong>
                               <div id="alertRegisterText" class="content">
                                 Something went wrong!

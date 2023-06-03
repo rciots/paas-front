@@ -37,6 +37,7 @@
                     Welcome, <a href="/users/profile" ><%= user %></a>!
                     <button class="pf-c-button pf-m-primary" onclick="location.href='/users/logout'">Logout</button>
                   <% } else { %>
+                    <a class="create-account-link" href="#" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Create an account</a>
                     <button class="pf-c-button pf-m-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
                   <% } %>
                 </div>

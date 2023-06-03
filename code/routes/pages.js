@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 router.get('/home.md', (req, res) => {
-  const filePath = '../pages/home.md';
+  const filePath = 'pages/home.md';
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
@@ -15,7 +15,7 @@ router.get('/home.md', (req, res) => {
   });
 });
 router.get('/claw.md', (req, res) => {
-  const filePath = '../pages/claw.md';
+  const filePath = '/app/pages/claw.md';
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {

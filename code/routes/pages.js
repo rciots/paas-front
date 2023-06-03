@@ -15,7 +15,7 @@ router.get('/home.md', (req, res) => {
   });
 });
 router.get('/claw.md', (req, res) => {
-  const filePath = '../pages/claw.md';
+  const filePath = 'pages/claw.md';
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {

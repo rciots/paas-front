@@ -1,4 +1,4 @@
-[![Youtube example claw.rciots.com](https://raw.githubusercontent.com/rciots/paas-front/main/pages/images/youtube.png)](https://www.youtube.com/watch?v=Yd9cCu0k9_g)
+[![Youtube example claw.rciots.com](/images/youtube.png)](https://www.youtube.com/watch?v=Yd9cCu0k9_g)
 
 ## Hardware
 
@@ -38,4 +38,4 @@ Its repositories contain two folders:
 
 All services are built in quay.io's rciots organization https://quay.io/organization/rciots, except for edge-cam as it needs the ffmpeg package and is built on a RHEL machine with active subscription to enable the repository *"codeready-builder-for-rhel-9-x86_64-rpms"*
 
-![claw diagram](https://raw.githubusercontent.com/rciots/paas-front/main/pages/images/claw.rciots.png)
+![claw diagram](/images/claw.rciots.png)

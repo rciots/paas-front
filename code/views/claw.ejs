@@ -18,7 +18,7 @@
       <script>
         document.getElementById("nav_home").classList.add("pf-m-current");
         $(function() {
-          $.get('https://raw.githubusercontent.com/rciots/paas-front/main/pages/home.md', function(data) {
+          $.get('https://raw.githubusercontent.com/rciots/paas-front/main/pages/claw.md', function(data) {
             const htmlContent = marked.parse(data);
             $('#markdown-content').html(htmlContent);
           });

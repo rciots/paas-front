@@ -10,13 +10,18 @@ const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 8080;
 
-const mongodb = process.env.PORT || 'mongodb://localhost/userdb';
+const mongodb = process.env.MONGODB_CONNECT || 'mongodb://mongodb:27017/userdb';
 
 mongoose.connect(mongodb, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('Database connected!');
+});
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));

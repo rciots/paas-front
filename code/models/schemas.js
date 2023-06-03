@@ -1,45 +1,52 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-var userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        validate: {
-        validator: function (v) {
-            // Regular expression for email validation
-            return /\S+@\S+\.\S+/.test(v);
-        },
-        message: 'Please enter a valid email'
-        }
-    },
-    username: {
-        type: String,
-        required: true,
-        minlength: 3,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true,
-        minlength: 8,
-        // Regular expression for a strong password (at least one lowercase letter, one uppercase letter, one number, and one special character)
-        validate: {
-        validator: function (v) {
-            return /^(?=.*[a-z])(?=.*[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v);
-        },
-        message: 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character, and be at least 8 characters long'
-        }
-    }
-}, { timestamps: true });
-userSchema.pre('save', function(next) {
-    var user = this;
-    // generate a salt
-    hash = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
-    user.password = hash;
-    next();
 
+var userSchema = new mongoose.Schema({
+  email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+          validator: function (v) {
+              return /\S+@\S+\.\S+/.test(v);
+          },
+          message: 'Please enter a valid email'
+      }
+  },
+  username: {
+      type: String,
+      required: true,
+      minlength: 3,
+      unique: true
+  },
+  password: {
+      type: String,
+      required: true,
+      minlength: 8
+  }
+}, { timestamps: true });
+
+userSchema.pre('save', function(next) {
+  var user = this;
+
+  if (user.isModified('password')) {
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*?[0-9])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(user.password)) {
+          return next(new Error('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character, and be at least 8 characters long'));
+      }
+      bcrypt.genSalt(10, function(err, salt) {
+          if (err) return next(err);
+          
+          bcrypt.hash(user.password, salt, function(err, hash) {
+              if (err) return next(err);
+              user.password = hash;
+              next();
+          });
+      });
+  } else {
+      next();
+  }
 });
+
 
 const templateSchema = new mongoose.Schema({
   name: { type: String, required: true },

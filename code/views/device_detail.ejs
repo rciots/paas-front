@@ -145,7 +145,7 @@
     const templatenavfiles = document.getElementById('template-navfiles');
  //$('#alertToken').hide();
   function changefile(filename){
-    var seltemplate = <%- seltemplate ? JSON.stringify(seltemplate) : "" %>;
+    var seltemplate = <%- seltemplate ? JSON.stringify(seltemplate) : '""' %>;
     var templates = <%- templates ? JSON.stringify(templates) : [] %>;
     const updatefile = document.getElementById('updatefile');
     const deletefile = document.getElementById('deletefile');

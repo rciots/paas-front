@@ -14,10 +14,7 @@ var sessionChecker = (req, res, next) => {
     }
 };
 
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log('Database connected!');
-});
+
 
   
 const User = require('../models/schemas').User;
@@ -42,7 +39,7 @@ router.post('/register', async (req, res) => {
         const newUser = new User({
           email: email,
           username: username,
-          password: bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+          password: password
         });
 
         newUser.save()

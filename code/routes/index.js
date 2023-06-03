@@ -10,6 +10,15 @@ router.get('/', (req, res) => {
     }
   res.render('home');
 });
+router.get('/claw', (req, res) => {
+  if (req.session.authenticated === true ){
+      console.log(req.session.user);
+      res.locals.user = req.session.user;
+  } else {
+
+  }
+res.render('claw');
+});
 
 router.get('/about', (req, res) => {
   res.render('about');

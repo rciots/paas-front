@@ -170,6 +170,64 @@ router.get('/template-create', (req, res, next) => {
   }
 });
 
+router.get('/templates/:id', (req, res, next) => {
+  if (req.session.authenticated === true) {
+    User.findOne({ username: req.session.user })
+      .then((user) => {
+        const templateId = req.params.id;
+        const username = user.username;
+        Template.findOne({ owner: user._id, _id: templateId})
+          .then((template) => {
+            console.log(template);
+            res.render('devices_template_detail', { username: username,  template: template});
+          })
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.json({ message: 'Error' });
+      });
+  } else {
+    res.redirect('/');
+  }
+});
+
+router.post('/templates/:id/edit', (req, res, next) => {
+  if (req.session.authenticated === true) {
+    User.findOne({ username: req.session.user })
+      .then((user) => {
+        console.log(req.body);
+        files = JSON.parse(req.body.files);
+        console.log(files);
+        const filenames = Object.keys(files);
+        var fileschema = [];
+        filenames.forEach(filename => {
+          var file = {}
+          file.name = filename;
+          file.content = files[filename];
+          fileschema.push(file);
+        });
+        Template.findOneAndUpdate({ owner: user._id, _id: req.params.id}, {name: req.body.template, description: req.body.description, owner: user._id, files: fileschema })
+        .then((updatedDevice) => {
+          console.log(updatedDevice);
+          res.redirect('/devices/templates');
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.json({ message: 'Error' });
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.json({ message: 'Error' });
+      });
+  } else {
+    res.redirect('/');
+  }
+});
+
+
+
+
 router.post('/template-create', (req, res, next) => {
   if (req.session.authenticated === true) {
     User.findOne({ username: req.session.user })
@@ -216,10 +274,10 @@ router.get('/templates/:id/delete', async (req, res, next) => {
   try {
     if (req.session.authenticated === true) {
       const templateId = req.params.id;
-      const foundTemplate = await Device.findById(templateId).exec();
+      const foundTemplate = await Template.findById(templateId).exec();
       if (!foundTemplate) {
-        console.error(`Template with ID ${deviceId} not found`);
-        return res.json({ message: 'Device not found' });
+        console.error(`Template with ID ${templateId} not found`);
+        return res.json({ message: 'Template not found' });
       }
       // check if the user is the owner of the device
       const foundUser = await User.findOne({ username: req.session.user }).exec();
@@ -342,7 +400,7 @@ router.get('/:id/delete', async (req, res, next) => {
         }
         await Device.deleteOne({ _id: foundDevice._id }).exec();
         console.log(`Device with ID ${foundDevice._id} deleted successfully`);
-        return res.redirect('/users/profile');
+        return res.redirect('/devices');
       }  else {
       res.redirect('/');
         }
@@ -352,41 +410,6 @@ router.get('/:id/delete', async (req, res, next) => {
     }
   });
 
-  
-router.get('/:id/edit', (req, res, next) => {
-    if (req.session.authenticated === true) {
-        const deviceId = req.params.id;
-        Device.findById(deviceId, (err, foundDevice) => {
-        if (err) {
-            console.error(err);
-            return res.json({ message: 'Error' });
-        }
-        if (!foundDevice) {
-            console.error(`Device with ID ${deviceId} not found`);
-            return res.json({ message: 'Device not found' });
-        }
-        // check if the user is the owner of the device
-        User.findOne({ username: req.session.user }, (err, foundUser) => {
-            if (err) {
-            console.error(err);
-            return res.json({ message: 'Error' });
-            }
-            if (!foundUser) {
-            console.error(`User ${req.session.user} not found`);
-            return res.json({ message: 'User not found' });
-            }
-            if (!foundDevice.owner.equals(foundUser._id)) {
-            console.error(`User ${foundUser.username} is not the owner of device ${foundDevice.name}`);
-            return res.json({ message: 'You are not the owner of this device' });
-            }
-            res.locals.user = req.session.user;
-            res.render('edit_device', { device: foundDevice });
-        });
-        });
-    } else {
-        res.redirect('/');
-    }
-});
 router.post('/:id/edit', (req, res, next) => {
     if (req.session.authenticated === true) {
       if (req.body.template !== undefined) {

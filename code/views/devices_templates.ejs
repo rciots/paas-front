@@ -78,12 +78,12 @@
                                     <button class="pf-c-button pf-c-dropdown__toggle pf-m-plain" type="button" aria-label="Actions" onclick="toggleMenu('<%= template._id %>')">
                                       <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
                                     </button>
-                                    <ul class="pf-c-dropdown__menu pf-m-align-right" id="<%= template.name %>-menu" style="display: none;">
+                                    <ul class="pf-c-dropdown__menu pf-m-align-right" id="<%= template._id %>-menu" style="display: none;">
                                       <li>
-                                        <button class="pf-c-dropdown__menu-item" onclick="window.location.href='/devices/templates/<%= templates._id %>/edit'">Edit</button>
+                                        <button class="pf-c-dropdown__menu-item" onclick="window.location.href='/devices/templates/<%= template._id %>'">Edit</button>
                                       </li>
                                       <li>
-                                        <button class="pf-c-dropdown__menu-item"onclick="window.location.href='/devices/templates/<%= templates._id %>/delete'">Delete</button>
+                                        <button class="pf-c-dropdown__menu-item"onclick="window.location.href='/devices/templates/<%= template._id %>/delete'">Delete</button>
                                       </li>
                                     </ul>
                                   </div>

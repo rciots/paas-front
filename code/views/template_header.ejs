@@ -84,6 +84,10 @@
       $('#alertLogin').hide();
       $('#alertRegister').hide();
     });
+    $('#loginRegister').on('show.bs.modal', function() {
+      $('#alertLogin').hide();
+      $('#alertRegister').hide();
+    });
     $('.form-signin').submit(function(event) {
       event.preventDefault();
       var form = $(this);
@@ -165,7 +169,7 @@
                             <label>Password:</label>
                             <input type="password" name="password" class="form-control" required>
                             <br>
-                            <button type="submit" class="btn btn-primary">Register</button><div id="alertRegister" class="alert alert-danger alert-dismissible fade" role="alert">
+                            <button type="submit" class="btn btn-primary">Register</button><div id="alertRegister" class="alert alert-danger alert-dismissible fade show" role="alert">
                               <strong>Error:</strong>
                               <div id="alertRegisterText" class="content">
                                 Something went wrong!

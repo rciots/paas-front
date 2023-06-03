@@ -15,6 +15,12 @@
       </div>
   
       <script>
+        const navBar = document.getElementById('navBar');
+        var listItems = navBar.getElementsByTagName('li');
+        for (var i = 0; i < listItems.length; i++) {
+          var listlink = listItems[i].getElementsByTagName('a');
+          listlink[0].classList.remove('pf-m-current'); 
+        }
         document.getElementById("nav_home").classList.add("pf-m-current");
         $(function() {
           $.get('https://www.rciots.com/pages/home.md', function(data) {

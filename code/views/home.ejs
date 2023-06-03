@@ -10,7 +10,6 @@
     <%- include('template_header') %>
     <main class="container">
       <div class="jumbotron">
-        <h1 id="tittle">Documentation</h1>
         <br>
         <p id="markdown-content">Loading markdown content...</p>
       </div>
@@ -18,7 +17,7 @@
       <script>
         document.getElementById("nav_home").classList.add("pf-m-current");
         $(function() {
-          $.get('https://raw.githubusercontent.com/rciots/paas-front/main/pages/home.md', function(data) {
+          $.get('https://www.rciots.com/pages/home.md', function(data) {
             const htmlContent = marked.parse(data);
             $('#markdown-content').html(htmlContent);
           });

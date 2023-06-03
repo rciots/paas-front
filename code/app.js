@@ -38,9 +38,11 @@ app.use(session({
 }));
 const usersRouter = require('./routes/users');
 const indexRouter = require('./routes/index');
+const pagesRouter = require('./routes/pages');
 const devicesRouter = require('./routes/devices');
 app.use('/users', usersRouter);
 app.use('/', indexRouter);
+app.use('/pages', pagesRouter);
 app.use('/devices', devicesRouter);
 
 http.listen(PORT, () => {

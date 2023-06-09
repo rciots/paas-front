@@ -32,7 +32,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: true, // This will only work if you have https enabled!
+    secure: false,
     maxAge: 1800000
   } 
 }));

@@ -164,8 +164,7 @@
                   console.error('Error al copiar el texto al portapapeles: ', err);
                 });
             });
-            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            document.querySelector('#alertTokenText').value = response.message;
+            document.querySelector('#alertTokenText').value = tokenMsg;
             $('#alertToken').show();
 
           }

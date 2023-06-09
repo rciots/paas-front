@@ -145,8 +145,11 @@
             formToken.reset();
             const copyButton = document.querySelector('#copy-button');
             const tokenText = response.message;
+            var tokenMsg = "# " + tokenText;
+            const tokensplit = tokenText.split(":");
+            tokenMsg += "\n oc process -f https://raw.githubusercontent.com/rciots/rciots-agent/main/manifest/openshift-template/template.yaml token=" + tokensplit[1] + " devicename=device001 namespace=rciots-agent -o yaml | oc create -f -"
             copyButton.addEventListener('click', () => {
-              navigator.clipboard.writeText(tokenText)
+              navigator.clipboard.writeText(tokenMsg)
                 .then(() => {
                   copyButton.setAttribute("data-bs-original-title", "Copied!");
                   $('#copy-button').tooltip('show');

@@ -32,8 +32,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: false, // This will only work if you have https enabled!
-    maxAge: 600000 // 1 min
+    secure: true, // This will only work if you have https enabled!
+    maxAge: 1800000
   } 
 }));
 const usersRouter = require('./routes/users');

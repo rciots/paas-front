@@ -5,6 +5,7 @@
 The hardware used in the solution is the following:
 
 Intel NUC 10: running Single Node Openshift
+
 Fitlet2: Running Microshift
 
 Components:

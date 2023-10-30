@@ -23,7 +23,7 @@
         }
         document.getElementById("nav_home").classList.add("pf-m-current");
         $(function() {
-          $.get('https://www.rciots.com/pages/home.md', function(data) {
+          $.get('/pages/home.md', function(data) {
             const htmlContent = marked.parse(data);
             $('#markdown-content').html(htmlContent);
           });

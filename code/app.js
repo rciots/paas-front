@@ -7,10 +7,12 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const session = require('express-session');
 const mongoose = require('mongoose');
-
+var env = require('dotenv').config();
 const PORT = process.env.PORT || 8080;
-
-const mongodb = process.env.MONGODB_CONNECT || 'mongodb://mongodb:27017/userdb';
+var mongodb = 'mongodb://localhost:27017/userdb';
+if (process.env.MONGODB_USER && process.env.MONGODB_PASSWORD && process.env.MONGODB_SERVER && process.env.MONGODB_PORT && process.env.MONGODB_DB) {
+  mongodb = 'mongodb://' + process.env.MONGODB_USER + ':' + process.env.MONGODB_PASSWORD + '@' + process.env.MONGODB_SERVER + ':' + process.env.MONGODB_PORT + '/' + process.env.MONGODB_DB;
+}
 
 mongoose.connect(mongodb, {
   useNewUrlParser: true,
@@ -27,15 +29,22 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(session({
+const sessionConfig = {
   secret: 'secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { 
-    secure: false,
-    maxAge: 1800000
-  } 
-}));
+  cookie: {
+    maxAge: 3600000,
+    httpOnly: true,
+    sameSite: 'strict'
+  }
+};
+
+if (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'pre') {
+  sessionConfig.cookie.secure = true;
+}
+
+app.use(session(sessionConfig));
 const usersRouter = require('./routes/users');
 const indexRouter = require('./routes/index');
 const pagesRouter = require('./routes/pages');

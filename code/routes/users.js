@@ -50,13 +50,14 @@ router.post('/register', async (req, res) => {
             return res.json({ message: 'Logged In.', user: newUser.username, authenticated: true});
           })
           .catch(function(err) {
-            console.log(err);
-            throw err;
+            console.log(JSON.stringify(err));
+            return res.json({ message: err.message});
           });
       }
     })
     .catch(function(err) {
-      throw err;
+      console.log("msg2:" + err);
+      return res.json({ message: err});
     });
 });
 let loginAttempts = {};

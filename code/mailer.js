@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const smtpSrv = process.env.SMTPSRV;
-const smtpPort = process.env.SMTPPORT;
+const smtpPort = process.env.SMTPPORT * 1;
 const smtpSecure = process.env.SMTPSECURE;
 const smtpUser = process.env.SMTPUSER;
 const smtpPassword = process.env.SMTPPASSWORD;

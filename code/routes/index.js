@@ -24,6 +24,12 @@ router.get('/about', (req, res) => {
   res.render('about');
 });
 router.get('/documentation', (req, res) => {
+  if (req.session.authenticated === true ){
+    console.log(req.session.user);
+    res.locals.user = req.session.user;
+  } else {
+
+  }
   res.render('documentation');
 });
 module.exports = router;

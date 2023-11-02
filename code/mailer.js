@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const smtpSrv = process.env.SMTPSRV;
-const smtpPort = process.env.SMTPPORT * 1;
-const smtpSecure = process.env.SMTPSECURE;
+const smtpPort = parseInt(process.env.SMTPPORT, 10);
+const smtpSecure = process.env.SMTPSECURE.toLowerCase() === 'true';
 const smtpUser = process.env.SMTPUSER;
 const smtpPassword = process.env.SMTPPASSWORD;
 function sendEmail(to, messageType, values) {

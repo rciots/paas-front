@@ -1,0 +1,39 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/patternfly.css">
+    <link rel="stylesheet" href="css/patternfly-addons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+<body>
+    <%- include('template_header') %>
+    <main class="container">
+      <div class="jumbotron">
+        <br>
+        <p id="markdown-content">Loading markdown content...</p>
+      </div>
+  
+      <script>
+        const navBar = document.getElementById('navBar');
+        var listItems = navBar.getElementsByTagName('li');
+        for (var i = 0; i < listItems.length; i++) {
+          var listlink = listItems[i].getElementsByTagName('a');
+          listlink[0].classList.remove('pf-m-current'); 
+        }
+        document.getElementById("nav_doc").classList.add("pf-m-current");
+        $(function() {
+          $.get('/pages/documentation.md', function(data) {
+            const htmlContent = marked.parse(data);
+            $('#markdown-content').html(htmlContent);
+          });
+        });
+      </script>
+      <script src="js/marked.min.js"></script>
+    </main>
+    
+      
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+    </body>
+  </html>

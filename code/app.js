@@ -19,7 +19,7 @@ mongoose.connect(mongodb, {
   useUnifiedTopology: true
 });
 const db = mongoose.connection;
-
+console.log(mongodb);
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('Database connected!');

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-
+const { sendEmail } = require('../mailer.js');
 
 var sessionChecker = (req, res, next) => {    
     console.log(req.session);
@@ -47,17 +47,18 @@ router.post('/register', async (req, res) => {
             console.log(newUser);
             req.session.authenticated = true;
             req.session.user = newUser.username;
+            sendEmail(newUser.email, "newUser", [newUser.username]);
             return res.json({ message: 'Logged In.', user: newUser.username, authenticated: true});
           })
           .catch(function(err) {
-            console.log(JSON.stringify(err));
-            return res.json({ message: err.message});
+            console.log(err);
+            return res.json({ message: "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character, and be at least 8 characters long"});
           });
       }
     })
     .catch(function(err) {
       console.log("msg2:" + err);
-      return res.json({ message: err});
+      return res.json({ message: "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character, and be at least 8 characters long"});
     });
 });
 let loginAttempts = {};

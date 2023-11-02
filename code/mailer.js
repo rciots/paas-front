@@ -4,7 +4,6 @@ const smtpPort = process.env.SMTPPORT;
 const smtpSecure = process.env.SMTPSECURE;
 const smtpUser = process.env.SMTPUSER;
 const smtpPassword = process.env.SMTPPASSWORD;
-
 function sendEmail(to, messageType, values) {
     const transporter = nodemailer.createTransport({
         host: smtpSrv,
@@ -15,7 +14,7 @@ function sendEmail(to, messageType, values) {
         pass: smtpPassword
         }
     });
-    let subject, text;
+    let subject, text, bbc;
 
     if (messageType === 'newUser') {
         subject = 'Welcome to RCIoTs';
@@ -78,14 +77,14 @@ function sendEmail(to, messageType, values) {
     if (bbc) {
         mailOptions.bbc = bbc;
     }
-    // Envía el correo
+
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-        console.log('Error al enviar el correo: ' + error);
+        console.log('Error sending email: ' + error);
         } else {
-        console.log('Correo enviado: ' + info.response);
+        console.log('Email sended: ' + info.response);
         }
-        console.log("MAIL DATA: " + mailOptions);
+        console.log("MAIL DATA: " + JSON.stringify(mailOptions));
     });
 };
 

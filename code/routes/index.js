@@ -17,11 +17,13 @@ router.get('/claw', (req, res) => {
   } else {
 
   }
-res.render('claw');
+  res.render('claw');
 });
 
 router.get('/about', (req, res) => {
   res.render('about');
 });
-
+router.get('/documentation', (req, res) => {
+  res.render('documentation');
+});
 module.exports = router;

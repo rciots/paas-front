@@ -27,5 +27,18 @@ router.get('/claw.md', (req, res) => {
     res.send(data);
   });
 });
+router.get('/documentation.md', (req, res) => {
+  const filePath = 'pages/documentation.md';
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error reading file.');
+    }
+
+    res.set('Content-Type', 'text/markdown');
+    res.send(data);
+  });
+});
 
 module.exports = router;

@@ -3,7 +3,25 @@ body {
   color: #fff;
   padding: 20px;
 }
-
+.ms-auto{
+  color: #282828;
+}
+.stackedit__left a:hover{
+  color: #fff;
+}
+.stackedit__html {
+  max-width: 80% !important;
+}
+.stackedit__left {
+  top: 100px !important;
+  left: 50px !important;
+}
+.stackedit__right {
+  top: 100px !important;
+}
+body.stackedit {
+  color: #fff !important;
+}
 header {
   padding: 10px;
 }

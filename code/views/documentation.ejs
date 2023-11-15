@@ -1,39 +1,129 @@
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/patternfly.css">
-    <link rel="stylesheet" href="css/patternfly-addons.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/jquery.min.js"></script>
-<body>
-    <%- include('template_header') %>
-    <main class="container">
-      <div class="jumbotron">
-        <br>
-        <p id="markdown-content">Loading markdown content...</p>
-      </div>
-  
-      <script>
-        const navBar = document.getElementById('navBar');
-        var listItems = navBar.getElementsByTagName('li');
-        for (var i = 0; i < listItems.length; i++) {
-          var listlink = listItems[i].getElementsByTagName('a');
-          listlink[0].classList.remove('pf-m-current'); 
-        }
-        document.getElementById("nav_doc").classList.add("pf-m-current");
-        $(function() {
-          $.get('/pages/documentation.md', function(data) {
-            const htmlContent = marked.parse(data);
-            $('#markdown-content').html(htmlContent);
-          });
-        });
-      </script>
-      <script src="js/marked.min.js"></script>
-    </main>
-    
+  <meta charset="utf-8">
+  <title>RCIoTs Documentation</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+  <link rel="stylesheet" href="css/patternfly.css">
+  <link rel="stylesheet" href="css/patternfly-addons.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/jquery.min.js"></script>
+</head>
+
+<body class="stackedit">
+  <%- include('template_header') %>
+  <main class="container">
+    <div class="jumbotron">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
       
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-      <script src="js/bootstrap.bundle.min.js"></script>
-    </body>
-  </html>
+<ul>
+<li><a href="#">Documentation</a>
+<ul>
+<li><a href="#introduction">1. Introduction</a></li>
+<li><a href="#getting-started">2. Getting Started</a></li>
+<li><a href="#purpose">3. Purpose</a></li>
+<li><a href="#use-cases-to-cover">4. Use Cases to cover</a></li>
+<li><a href="#features">5. Features</a></li>
+<li><a href="#components">6. Components</a></li>
+<li><a href="#roadmap">7. Roadmap</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="documentation">Documentation</h1>
+      <br>
+<h2 id="introduction">1. Introduction</h2>
+<br>
+<p><b>RCIoTs, short for “Remote Control Internet of Things Service”</b>, represents a groundbreaking platform for managing edge devices that execute containerized workloads. It was conceived as a proof of concept and is currently in its early stages of development, with this document being authored in the final quarter of 2023. As of now, RCIoTs is a personal endeavor, and I am the sole individual responsible for its design and progress. However, I am wholeheartedly open to collaborations and contributions from the community to propel its evolution.</p>
+<p>The overarching objective behind RCIoTs is to offer a versatile solution that can be deployed as a multi-tenant Platform as a Service (PaaS) or hosted within a private infrastructure environment. At the core of this initiative lies a fundamental commitment: simplicity. The primary emphasis is to ensure that RCIoTs is exceptionally user-friendly, requiring minimal time and resources for users to embark on their journey with it.</p>
+<p>A secondary but crucial aspect of the project revolves around the establishment of robust communication channels between edge devices and RCIoTs. This communication is facilitated through the use of WebSockets with Mutual TLS (MTLS). The beauty of this approach is that it necessitates only an HTTPS connection to function effectively. This design decision eases the burden of communication across various network conditions, including mobile networks and corporate firewalls.</p>
+<p>The communication channel serves a dual purpose. On one hand, it allows for the seamless deployment of workload manifests to edge devices, ensuring that they execute tasks precisely as required. On the other hand, it serves as a conduit for collecting invaluable data from the edge. This includes logs, metrics, and any other data that applications running on the edge may need to export. This section of the project is still in its conceptual stage, waiting in the garage of ideas to be further developed and to address a wide range of use cases.</p>
+<p>In essence, RCIoTs aims to be a transformative solution that streamlines the management of edge devices with containerized workloads. With its commitment to user-friendliness and robust communication capabilities, it strives to empower organizations and individuals to leverage the full potential of the Internet of Things in an efficient and scalable manner.</p>
+<br>
+<h2 id="getting-started">2. Getting Started</h2>
+<br>
+<p><em><strong>Prerequisites</strong></em></p>
+<p>At present, the RCIoTs agent is designed to run on the following platforms:</p>
+<ul>
+<li>
+<p><strong>Red Hat Edge Devices:</strong> This includes the new distribution of RHEL for Edge, which incorporates MicroShift, a minimalistic distribution of OpenShift.</p>
+</li>
+<li>
+<p><strong>Red Hat Single Node OpenShift:</strong> This distribution of OpenShift is tailored to run on a single node, combining the control plane and workload.</p>
+</li>
+<li>
+<p><strong>Red Hat OpenShift:</strong> While not its primary purpose, the agent can also be run for testing on OpenShift clusters since it utilizes the necessary components available within OpenShift.</p>
+</li>
+</ul>
+<p>As of now, it has been primarily tested on these three types of OpenShift. The agent communicates with the <code>oc</code> binary (OpenShift CLI). However, it can also be adapted for use with <code>kubectl</code>, or the manifests can be applied through scripts, API calls to the edge, or device service management. The agent’s source code can be found at <a href="https://github.com/rciots/rciots-agent">https://github.com/rciots/rciots-agent</a>.</p>
+<p><strong>Network Requirements:</strong> Edge devices only need to connect to <code>https://enroll.rciots.com:443</code> and <code>https://edge.rciots.com:443</code>. The first connection is required for the initial enrollment, during which the agent receives client certificates to establish communication using WebSockets with Mutual TLS (MTLS) via the second connection. Once connected, certificate renewal is handled via WebSockets.</p>
+<p><em><strong>Registration at <a href="http://www.rciots.com">www.rciots.com</a></strong></em></p>
+<p>If you haven’t already registered, click on the “Create an account” link on this web. Provide your email, username, and password to complete the registration.</p>
+<p><em><strong>Creating an Enrollment Token</strong></em></p>
+<p>To create an enrollment token, follow these steps:</p>
+<ol>
+<li>
+<p>Navigate to “Devices” &gt; “Provisioning Tokens.”</p>
+</li>
+<li>
+<p>Create a new provisioning token.</p>
+</li>
+</ol>
+<p><em><strong>Running the Agent</strong></em></p>
+<p>Once you have the token, you can run the agent using the generated token. To do this, execute the following command. You can find the command in the token creation template.</p>
+<pre><code>
+oc process -f https://raw.githubusercontent.com/rciots/rciots-agent/main/manifest/openshift-template/template.yaml token=[TOKEN] devicename=device001 namespace=rciots-agent -o yaml | oc create -f -
+
+</code></pre>
+<p><em><strong>Device Approval</strong></em></p>
+<p>If the token was created automatically, the device is automatically accepted. If you deselected this option during token creation, the device(s) will appear in the “Pending Devices” view, awaiting approval.</p>
+<p><em><strong>Check the devices</strong></em></p>
+<p>Go to the Devices --&gt; current devices view to check your new managed devices.</p>
+<p>Congratulations! By following these simple steps, you have successfully connected your device to the platform. The next step is to define the workload to run on the devices, set it individually or create a reusable Template, based on Kustomize, to deploy the workload you wish to run on the edge. This can involve pointing to a GitHub repository or defining YAML directly through the interface.</p>
+<br>
+<h2 id="purpose">3. Purpose</h2>
+<br>
+<h2 id="use-cases-to-cover">4. Use Cases to cover</h2>
+<h3 id="industry">4.1. Industry</h3>
+<h3 id="automotive">4.2. Automotive</h3>
+<h3 id="retail">4.3. Retail</h3>
+<h3 id="diy-initiatives">4.4. DIY Initiatives</h3>
+<h2 id="features">5. Features</h2>
+<h2 id="components">6. Components</h2>
+<h3 id="frontend">6.1. Frontend</h3>
+<h3 id="agent-connector">6.2. Agent-Connector</h3>
+<h3 id="agent">6.3. Agent</h3>
+<h3 id="kustomize">6.4. Kustomize</h3>
+<h2 id="roadmap">7. Roadmap</h2>
+
+    </div>
+  </div>
+    </div>
+  </main>
+  <script>
+    const navBar = document.getElementById('navBar');
+    var listItems = navBar.getElementsByTagName('li');
+    for (var i = 0; i < listItems.length; i++) {
+      var listlink = listItems[i].getElementsByTagName('a');
+      listlink[0].classList.remove('pf-m-current'); 
+    }
+    document.getElementById("nav_doc").classList.add("pf-m-current");
+    $(function() {
+      $.get('/pages/documentation.md', function(data) {
+        const htmlContent = marked.parse(data);
+        $('#markdown-content').html(htmlContent);
+      });
+    });
+  </script>
+  <script src="js/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

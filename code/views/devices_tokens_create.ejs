@@ -147,7 +147,7 @@
             const tokenText = response.message;
             var tokenMsg = "# TOKEN: " + tokenText + "\n";
             const tokensplit = tokenText.split(":");
-            tokenMsg += "\n oc process -f https://raw.githubusercontent.com/rciots/rciots-agent/main/manifest/openshift-template/template.yaml token=" + tokensplit[1] + " devicename=device001 namespace=rciots-agent -o yaml --local | oc create -f -"
+            tokenMsg += "\n oc process -f https://raw.githubusercontent.com/rciots/rciots-agent/main/manifest/openshift-template/template.yaml arch=x86_64 token=" + tokensplit[1] + " devicename=device001 namespace=rciots-agent -o yaml --local | oc create -f -"
             copyButton.addEventListener('click', () => {
               navigator.clipboard.writeText(tokenMsg)
                 .then(() => {
